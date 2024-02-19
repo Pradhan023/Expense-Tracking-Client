@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import {
   Button,
@@ -68,8 +68,6 @@ const Container = () => {
     // return valid value
     return valid;
   };
-
-  dispatch(HistoryApi())
 
   // Api call function
   async function newCall() {
