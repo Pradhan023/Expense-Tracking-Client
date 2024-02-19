@@ -13,9 +13,6 @@ import axios from "axios";
 
 const Container = () => {
   const dispatch = useDispatch();
-  useEffect(()=>{
-    dispatch(HistoryApi())
-  },[dispatch])
   const Data = useSelector((i) => i.Trackerdata);
   // console.log(Data.userinfo);
   const [state, setState] = useState({
@@ -71,6 +68,8 @@ const Container = () => {
     // return valid value
     return valid;
   };
+
+  dispatch(HistoryApi())
 
   // Api call function
   async function newCall() {
