@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import {
   Button,
@@ -13,6 +13,9 @@ import axios from "axios";
 
 const Container = () => {
   const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(HistoryApi())
+  },[dispatch])
   const Data = useSelector((i) => i.Trackerdata);
   // console.log(Data.userinfo);
   const [state, setState] = useState({
