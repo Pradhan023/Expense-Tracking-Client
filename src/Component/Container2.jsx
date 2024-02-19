@@ -8,6 +8,7 @@ const Container2 = () => {
   const date = new Date();
   const Data = useSelector((state) => state.Trackerdata);
   const dispatch = useDispatch();
+  // console.log(Data.userinfo.accessToken);
   useEffect(() => {
     dispatch(HistoryApi());
   }, []);
@@ -16,7 +17,7 @@ const Container2 = () => {
   const Delete = async (state) => {
     // console.log(state);
     try {
-      axios.post(
+      await axios.post(
         "https://expense-tracking-api-ux7o.onrender.com/delete",
         state,
         {

@@ -76,9 +76,9 @@ const Login = () => {
         if (data.data.msg == "successfully loged in") {
           toast.success(data.data.msg);
           localStorage.setItem("info", JSON.stringify(data.data.user)); //json.stringfy converts into strings and we can get data by converting in object becasue setitem converts the object in string automatically
+          // dispatch(HistoryApi())
           setTimeout(() => {
             Nav("/expensetracker");
-            window.location.reload(false)
           }, 2000);
         } else {
           toast.warn(data.data.msg);
@@ -86,7 +86,7 @@ const Login = () => {
       } catch (err) {
         console.log("Signin Api Error", err);
       }
-      dispatch(HistoryApi())
+      // dispatch(HistoryApi())
       // console.log(state);
       setState({
         username: "",

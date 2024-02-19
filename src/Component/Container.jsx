@@ -75,7 +75,7 @@ const Container = () => {
     // console.log(state);
     // console.log(newState);
     try {
-      const data = await axios.post(
+       await axios.post(
         "https://expense-tracking-api-ux7o.onrender.com/createdata",
         newState,
         {

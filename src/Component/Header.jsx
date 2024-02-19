@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -16,7 +15,7 @@ const Header = () => {
       localStorage.clear();
       handleClose();
       Nav("/");
-      window.location.reload(false);
+      // window.location.reload(false);
     }
   }
   const [anchorEl, setAnchorEl] = useState(null);
@@ -28,13 +27,13 @@ const Header = () => {
     setAnchorEl(null);
   };
   return (
-    <div className="flex justify-between items-center lg:px-8 px-3 py-2 lg:py-3 h-12 bg-slate-900 text-white cursor-pointer">
-      <p className="lg:text-3xl text-lg lg:ml-8" onClick={() => Nav("/")}>
+    <div className="flex justify-between items-center lg:px-8 px-3 py-2 lg:py-3 md:py-4 h-12 bg-slate-900 text-white cursor-pointer">
+      <p className="lg:text-3xl md:text-2xl text-lg lg:ml-8" onClick={() => Nav("/")}>
         Expense Tracker
       </p>
 
       {!info ? (
-        <p className="lg:text-xl" onClick={() => Nav("/login")}>
+        <p className="lg:text-xl md:text-xl" onClick={() => Nav("/login")}>
           Sign In
         </p>
       ) : (
@@ -47,7 +46,7 @@ const Header = () => {
             // aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
           >
-            <p className="text-white lg:text-lg">Profile</p>
+            <p className="text-white md:text-lg lg:text-lg">Profile</p>
           </Button>
           <Menu
             id="basic-menu"

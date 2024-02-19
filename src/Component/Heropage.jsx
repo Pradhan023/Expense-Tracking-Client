@@ -9,7 +9,7 @@ const Heropage = () => {
   };
   return (
     <>
-      <div className="herobg">
+      <div className="herobg lg:h-[85vh] md:h-[90vh] ">
         <div className="flex flex-col justify-center h-96 gap-12">
           {/* content */}
           <div className="flex justify-center">

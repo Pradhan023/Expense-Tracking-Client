@@ -4,15 +4,18 @@ import axios from "axios";
 // get data from localstorage
 const user = localStorage?.getItem("info");
 const userData = JSON.parse(user);
-// console.log(user);
+// console.log(userData);
 
 export const HistoryApi = createAsyncThunk("Api", async () => {
+  const user = localStorage?.getItem("info");
+  const userdata = JSON.parse(user);
+  // console.log(userdata);
   try {
     const data = await axios.get(
       "https://expense-tracking-api-ux7o.onrender.com/getdata",
       {
         headers: {
-          Authorization: "Bearer " + userData?.accessToken, //the token is a variable which holds the token
+          Authorization: "Bearer " + userdata?.accessToken, //the token is a variable which holds the token
         },
       }
     );
@@ -21,6 +24,7 @@ export const HistoryApi = createAsyncThunk("Api", async () => {
     console.log("GEt Error slice", err);
   }
 });
+
 
 const initialState = {
   historyData: [],
