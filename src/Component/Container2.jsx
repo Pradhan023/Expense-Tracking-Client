@@ -8,16 +8,14 @@ const Container2 = () => {
   const date = new Date();
   const Data = useSelector((state) => state.Trackerdata);
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(HistoryApi());
-  }, [dispatch]);
+  }, []);
   // console.log(Data.data);
 
   const Delete = async (state) => {
     // console.log(state);
     try {
-      dispatch(HistoryApi());
       axios.post(
         "https://expense-tracking-api-ux7o.onrender.com/delete",
         state,
@@ -27,7 +25,7 @@ const Container2 = () => {
           },
         }
       );
-      // dispatch(HistoryApi());
+      dispatch(HistoryApi());
       // console.log(data.data);
     } catch (err) {
       console.log("Delete api ", err);
@@ -51,7 +49,10 @@ const Container2 = () => {
                   }
                   key={index}
                 >
-                  <p className="text-black lg:w-1/2 cursor-pointer" onClick={() => Delete(i)}>
+                  <p
+                    className="text-black lg:w-1/2 cursor-pointer"
+                    onClick={() => Delete(i)}
+                  >
                     <MdDelete />
                   </p>
                   <p className="lg:w-1/2">{i.itemName}</p>

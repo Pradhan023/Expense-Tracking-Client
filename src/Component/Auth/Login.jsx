@@ -76,10 +76,9 @@ const Login = () => {
         if (data.data.msg == "successfully loged in") {
           toast.success(data.data.msg);
           localStorage.setItem("info", JSON.stringify(data.data.user)); //json.stringfy converts into strings and we can get data by converting in object becasue setitem converts the object in string automatically
-          dispatch(HistoryApi())
           setTimeout(() => {
             Nav("/expensetracker");
-            // window.location.reload(false)
+            window.location.reload(false)
           }, 2000);
         } else {
           toast.warn(data.data.msg);
@@ -87,6 +86,7 @@ const Login = () => {
       } catch (err) {
         console.log("Signin Api Error", err);
       }
+      dispatch(HistoryApi())
       // console.log(state);
       setState({
         username: "",
@@ -145,9 +145,9 @@ const Login = () => {
                 onChange={handleChange}
               />
               <FormHelperText>
-                <p className={error.password ? "text-red-600" : "text-black"}>
+                <span className={error.password ? "text-red-600" : "text-black"}>
                   {error.password}
-                </p>
+                </span>
               </FormHelperText>
             </FormControl>
           </div>
@@ -159,15 +159,15 @@ const Login = () => {
             variant="contained"
             color="primary"
           >
-            <p className="text-lg">Sign In</p>
+            <span className="text-lg">Sign In</span>
           </Button>
         </form>
-        <p
+        <div
           className="text-center mt-3 cursor-pointer"
           onClick={() => Nav("/signup")}
         >
           or Sign Up
-        </p>
+        </div>
       </div>
       <ToastContainer />
     </div>

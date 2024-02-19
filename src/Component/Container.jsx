@@ -71,10 +71,13 @@ const Container = () => {
 
   // Api call function
   async function newCall() {
+    const newState = { ...state, amount: Math.abs(state.amount) }; //here amount will become positive
+    // console.log(state);
+    // console.log(newState);
     try {
       const data = await axios.post(
         "https://expense-tracking-api-ux7o.onrender.com/createdata",
-        state,
+        newState,
         {
           headers: {
             Authorization: "Bearer " + Data.userinfo.accessToken, //the token is a variable which holds the token
@@ -82,7 +85,7 @@ const Container = () => {
         }
       );
       dispatch(HistoryApi());
-      console.log(data.data);
+      // console.log(data.data);
     } catch (err) {
       console.log("Post api ", err);
     }

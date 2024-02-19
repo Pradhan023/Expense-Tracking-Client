@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // get data from localstorage
-const user = localStorage.getItem("info");
+const user = localStorage?.getItem("info");
 const userData = JSON.parse(user);
 // console.log(user);
 
@@ -12,7 +12,7 @@ export const HistoryApi = createAsyncThunk("Api", async () => {
       "https://expense-tracking-api-ux7o.onrender.com/getdata",
       {
         headers: {
-          Authorization: "Bearer " + userData.accessToken, //the token is a variable which holds the token
+          Authorization: "Bearer " + userData?.accessToken, //the token is a variable which holds the token
         },
       }
     );
@@ -51,7 +51,7 @@ const reducerSlice = createSlice({
         const value = action.payload
           ?.filter((i) => i.category !== "Expense")
           .reduce((acc, ab) => {
-            return (acc += Number(ab?.amount));
+            return (acc += Math.abs(Number(ab?.amount)));
           }, 0);
 
         // console.log(value);
@@ -59,7 +59,7 @@ const reducerSlice = createSlice({
         state.Expense = action?.payload
           ?.filter((i) => i.category == "Expense")
           .reduce((acc, ab) => {
-            return (acc += Number(ab?.amount));
+            return (acc += Math.abs(Number(ab?.amount)));
           }, 0);
         state.Income = value ?? 0;
         // console.log(state.Income);
