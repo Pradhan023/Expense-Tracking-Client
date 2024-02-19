@@ -8,11 +8,14 @@ const userData = JSON.parse(user);
 
 export const HistoryApi = createAsyncThunk("Api", async () => {
   try {
-    const data = await axios.get("https://expense-tracking-api-ux7o.onrender.com/getdata", {
-      headers: {
-        Authorization: "Bearer " + userData.accessToken, //the token is a variable which holds the token
-      },
-    });
+    const data = await axios.get(
+      "https://expense-tracking-api-ux7o.onrender.com/getdata",
+      {
+        headers: {
+          Authorization: "Bearer " + userData.accessToken, //the token is a variable which holds the token
+        },
+      }
+    );
     return data.data;
   } catch (err) {
     console.log("GEt Error slice", err);
@@ -35,14 +38,6 @@ const initialState = {
 const reducerSlice = createSlice({
   name: "Tracker",
   initialState,
-  reducers: {
-    addData: (state, action) => {
-      console.log(action.payload);
-      if (state.Balance == 0 && action.payload.category == "Expense") {
-        return alert("You dont have valid Balance");
-      }
-    },
-  },
   extraReducers: (builder) => {
     builder.addCase(HistoryApi.pending, (state) => {
       state.transactionData.isLoading = true;
@@ -56,22 +51,25 @@ const reducerSlice = createSlice({
         const value = action.payload
           ?.filter((i) => i.category !== "Expense")
           .reduce((acc, ab) => {
-            return (acc += Number(ab.amount));
+            return (acc += Number(ab?.amount));
           }, 0);
 
         // console.log(value);
         // expense operation
-        state.Expense = action.payload
+        state.Expense = action?.payload
           ?.filter((i) => i.category == "Expense")
           .reduce((acc, ab) => {
-            return (acc += Number(ab.amount));
+            return (acc += Number(ab?.amount));
           }, 0);
-
-        state.Income = value;
+        state.Income = value ?? 0;
         // console.log(state.Income);
         // console.log(state.Income - state.Expense);
-        state.Balance = state.Income - state.Expense;
 
+        //if you get null,undefined ,nan the  this nullist coalescing will consvert into 0
+        state.Expense ??= 0;
+
+        // balance
+        state.Balance = state.Income - state.Expense;
         // console.log(action.payload);
         // console.log(state.transactionData.data);
       }),
@@ -81,5 +79,4 @@ const reducerSlice = createSlice({
   },
 });
 
-export const { addData } = reducerSlice.actions;
 export default reducerSlice.reducer;

@@ -8,13 +8,13 @@ import {
   Select,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { HistoryApi, addData } from "../modal/Slice";
+import { HistoryApi } from "../modal/Slice";
 import axios from "axios";
 
 const Container = () => {
-  const dispatch = useDispatch()
-  const Data = useSelector(i=>i.Trackerdata)
-  console.log(Data.userinfo);
+  const dispatch = useDispatch();
+  const Data = useSelector((i) => i.Trackerdata);
+  // console.log(Data.userinfo);
   const [state, setState] = useState({
     itemName: "",
     category: "",
@@ -69,31 +69,78 @@ const Container = () => {
     return valid;
   };
 
+  // Api call function
+  async function newCall() {
+    try {
+      const data = await axios.post(
+        "https://expense-tracking-api-ux7o.onrender.com/createdata",
+        state,
+        {
+          headers: {
+            Authorization: "Bearer " + Data.userinfo.accessToken, //the token is a variable which holds the token
+          },
+        }
+      );
+      dispatch(HistoryApi());
+      console.log(data.data);
+    } catch (err) {
+      console.log("Post api ", err);
+    }
+  }
+
   // submit function
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (handleValidate()) {
+      // alert("perfect")
       // then api call will work here
-      try{
-        const data= await axios.post("https://expense-tracking-api-ux7o.onrender.com/createdata",state,{headers:{
-          Authorization: 'Bearer ' + Data.userinfo.accessToken//the token is a variable which holds the token
-        }});
-        dispatch(HistoryApi())
-        console.log(data.data);
+      if (
+        Data.Balance == 0 &&
+        Data.Income >= 0 &&
+        state.category != "Expense"
+      ) {
+        await newCall();
+      } else if (Data.Balance == state.amount) {
+        await newCall();
+      } else if (Data.Balance > state.amount) {
+        await newCall();
+      } else if (state.category == "Bonus") {
+        await newCall();
+      } else {
+        alert("You dont have enough Balance");
       }
-      catch(err){
-        console.log("Post api " , err);
-      }
-
-      dispatch(addData(state))
       // console.log(state);
       setState({
         itemName: "",
         category: "",
         amount: "",
       });
+    } else {
+      alert("Invalid Entry or You dont have enough Balance ");
     }
+
+    // if (handleValidate()) {
+    //   // then api call will work here
+    //   try{
+    //     const data= await axios.post("https://expense-tracking-api-ux7o.onrender.com/createdata",state,{headers:{
+    //       Authorization: 'Bearer ' + Data.userinfo.accessToken//the token is a variable which holds the token
+    //     }});
+    //     dispatch(HistoryApi())
+    //     console.log(data.data);
+    //   }
+    //   catch(err){
+    //     console.log("Post api " , err);
+    //   }
+
+    //   dispatch(addData(state))
+    //   // console.log(state);
+    //   setState({
+    //     itemName: "",
+    //     category: "",
+    //     amount: "",
+    //   });
+    // }
   };
 
   return (
@@ -117,71 +164,76 @@ const Container = () => {
 
         {/* New transaction field  */}
         <div className="mt-6">
-        <h1 className="text-2xl">New Transaction</h1>
-        {/* input field */}
-        
+          <h1 className="text-2xl">New Transaction</h1>
+          {/* input field */}
+
           {/* first enter item  */}
           <form onSubmit={handleSubmit}>
             {/* input fields */}
 
             <div className="flex flex-col mb-4">
-            <TextField
-              error={Boolean(error.itemName)}
-              type="text"
-              name="itemName"
-              margin="normal"
-              value={state.itemName}
-              id="outlined-basic"
-              label="Item Name"
-              variant="outlined"
-              onChange={handleChange}
-              helperText={error.itemName}
-            />
-
-            {/* category */}
-
-            <FormControl
-              // sx={{ width: 120 }}
-              variant="outlined"
-              margin="normal"
-            >
-              <InputLabel id="category-type">Category</InputLabel>
-              <Select
-                labelId="category-type"
-                label="Category"
-                name="category"
-                value={state.category}
+              <TextField
+                error={Boolean(error.itemName)}
+                type="text"
+                name="itemName"
+                margin="normal"
+                value={state.itemName}
+                id="outlined-basic"
+                label="Item Name"
+                variant="outlined"
                 onChange={handleChange}
-                error={Boolean(error.category)}
+                helperText={error.itemName}
+              />
+
+              {/* category */}
+
+              <FormControl
+                // sx={{ width: 120 }}
+                variant="outlined"
+                margin="normal"
               >
-                {categoryType.map((i) => {
-                  return (
-                    <MenuItem key={i} value={i}>
-                      {i}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
+                <InputLabel id="category-type">Category</InputLabel>
+                <Select
+                  labelId="category-type"
+                  label="Category"
+                  name="category"
+                  value={state.category}
+                  onChange={handleChange}
+                  error={Boolean(error.category)}
+                >
+                  {categoryType.map((i) => {
+                    return (
+                      <MenuItem key={i} value={i}>
+                        {i}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
 
-            {/* amount field */}
+              {/* amount field */}
 
-            <TextField
-              error={Boolean(error.amount)}
-              type="number"
-              name="amount"
-              margin="normal"
-              value={state.amount}
-              id="outlined-basic"
-              label="Enter Amount"
-              variant="outlined"
-              onChange={handleChange}
-              helperText={error.amount}
-            />
+              <TextField
+                error={Boolean(error.amount)}
+                type="number"
+                name="amount"
+                margin="normal"
+                value={state.amount}
+                id="outlined-basic"
+                label="Enter Amount"
+                variant="outlined"
+                onChange={handleChange}
+                helperText={error.amount}
+              />
             </div>
 
             {/* sumbmit transaction */}
-            <Button className="h-14 w-full" type="submit" variant="contained" color="primary">
+            <Button
+              className="h-14 w-full"
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
               <p className="text-lg">Add Transaction</p>
             </Button>
           </form>

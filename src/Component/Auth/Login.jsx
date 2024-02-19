@@ -11,13 +11,13 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from 'axios'
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { HistoryApi } from "../../modal/Slice";
 
 const Login = () => {
-    const Nav = useNavigate()
-    const dispatch = useDispatch()
+  const Nav = useNavigate();
+  const dispatch = useDispatch();
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -62,26 +62,28 @@ const Login = () => {
 
   // api data
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (handleValidate()) {
       // then api call will work here
-      try{
-        const data = await axios.post("https://expense-tracking-api-ux7o.onrender.com/login",state)
+      try {
+        const data = await axios.post(
+          "https://expense-tracking-api-ux7o.onrender.com/login",
+          state
+        );
         // console.log(data.data);
         if (data.data.msg == "successfully loged in") {
           toast.success(data.data.msg);
-          localStorage.setItem("info",JSON.stringify(data.data.user))  //json.stringfy converts into strings and we can get data by converting in object becasue setitem converts the object in string automatically
+          localStorage.setItem("info", JSON.stringify(data.data.user)); //json.stringfy converts into strings and we can get data by converting in object becasue setitem converts the object in string automatically
           setTimeout(() => {
-            Nav("/expensetracker")
-            window.location.reload(false)
+            Nav("/expensetracker");
+            // window.location.reload(false)
           }, 2000);
         } else {
           toast.warn(data.data.msg);
         }
-      }
-      catch(err){
+      } catch (err) {
         console.log("Signin Api Error", err);
       }
       // console.log(state);
@@ -103,51 +105,50 @@ const Login = () => {
       <div className="lg:w-1/4 md:w-1/2 px-6 py-6 shadow-xl bg-white">
         <h1 className="text-2xl">Sign In</h1>
         {/* form */}
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit}>
           {/* input fields */}
 
           <div className="pb-5 flex flex-col">
+            {/* email */}
 
-          {/* email */}
-
-          <TextField
-            error={Boolean(error.email)}
-            type="email"
-            name="email"
-            margin="normal"
-            value={state.email}
-            label="Enter Email"
-            variant="outlined"
-            onChange={handleChange}
-            helperText={error.email}
-          />
-
-          {/* password */}
-          {/* sx={{ m: 2, width: "25ch" }} */}
-          <FormControl  variant="outlined">
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <OutlinedInput
+            <TextField
               error={Boolean(error.email)}
-              id="password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton onClick={handleClickShowPassword} edge="end">
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-              name="password"
-              value={state.password}
+              type="email"
+              name="email"
+              margin="normal"
+              value={state.email}
+              label="Enter Email"
+              variant="outlined"
               onChange={handleChange}
+              helperText={error.email}
             />
-            <FormHelperText>
-              <p className={error.password ? "text-red-600" : "text-black"}>
-                {error.password}
-              </p>
-            </FormHelperText>
-          </FormControl>
+
+            {/* password */}
+            {/* sx={{ m: 2, width: "25ch" }} */}
+            <FormControl variant="outlined">
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <OutlinedInput
+                error={Boolean(error.email)}
+                id="password"
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleClickShowPassword} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+                name="password"
+                value={state.password}
+                onChange={handleChange}
+              />
+              <FormHelperText>
+                <p className={error.password ? "text-red-600" : "text-black"}>
+                  {error.password}
+                </p>
+              </FormHelperText>
+            </FormControl>
           </div>
 
           {/* submit */}
@@ -160,7 +161,12 @@ const Login = () => {
             <p className="text-lg">Sign In</p>
           </Button>
         </form>
-        <p className="text-center mt-3 cursor-pointer" onClick={()=>Nav("/signup")}>or Sign Up</p>
+        <p
+          className="text-center mt-3 cursor-pointer"
+          onClick={() => Nav("/signup")}
+        >
+          or Sign Up
+        </p>
       </div>
       <ToastContainer />
     </div>
