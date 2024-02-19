@@ -65,7 +65,7 @@ const Header = () => {
                 handleClose();
               }}
             >
-              {info ? "Expense Tracker" : ""}
+              {info ? "Tracker" : ""}
             </MenuItem>
             <MenuItem onClick={handlecheck}>
               {info ? "Log Out" : "Sign In"}
