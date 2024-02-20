@@ -4,8 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 const Heropage = () => {
   const Nav = useNavigate();
+  // get data from localstorage
+  const user = localStorage?.getItem("info");
+  const info = JSON.parse(user);
   const handleChange = () => {
-    Nav("/login");
+    if (!info) {
+      Nav("/signup");
+    } else {
+      Nav("/expensetracker");
+    }
   };
   return (
     <>
@@ -19,7 +26,7 @@ const Heropage = () => {
           {/* get started */}
           <div className="pl-3 lg:pl-28 cursor-pointer" onClick={handleChange}>
             <p className="flex items-center gap-3 bg-amber-400 font-bold text-xl w-fit lg:px-4 px-2 py-3 rounded-lg">
-              Get Started <FaArrowRightToBracket />{" "}
+              {info ? "Lets Track IT" : "Get Started"} <FaArrowRightToBracket />{" "}
             </p>
           </div>
         </div>

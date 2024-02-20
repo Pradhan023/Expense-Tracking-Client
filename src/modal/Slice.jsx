@@ -25,7 +25,6 @@ export const HistoryApi = createAsyncThunk("Api", async () => {
   }
 });
 
-
 const initialState = {
   historyData: [],
   Balance: 0,

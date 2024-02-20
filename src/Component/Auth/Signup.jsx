@@ -27,6 +27,8 @@ const Signup = () => {
     password: "",
   });
 
+  const [loader, setLoader] = useState(false);
+
   const handleChange = (e) => {
     setState({
       ...state,
@@ -69,14 +71,19 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoader(true);
 
     if (handleValidate()) {
       // then api call will work here
       try {
-        const data = await axios.post("https://expense-tracking-api-ux7o.onrender.com/register", state);
+        const data = await axios.post(
+          "https://expense-tracking-api-ux7o.onrender.com/register",
+          state
+        );
         if (data.data.msg == "Registered Successfully") {
           toast.success(data.data.msg);
           setTimeout(() => {
+            setLoader(false);
             Nav("/login");
           }, 2000);
         } else {
@@ -156,9 +163,11 @@ const Signup = () => {
                 onChange={handleChange}
               />
               <FormHelperText>
-                <p className={error.password ? "text-red-600" : "text-black"}>
+                <span
+                  className={error.password ? "text-red-600" : "text-black"}
+                >
                   {error.password}
-                </p>
+                </span>
               </FormHelperText>
             </FormControl>
           </div>
@@ -170,15 +179,19 @@ const Signup = () => {
             variant="contained"
             color="primary"
           >
-            <p className="text-lg">Sign Up</p>
+            {!loader ? (
+              <span className="text-lg">Sign Up</span>
+            ) : (
+              <CircularProgress color="inherit" />
+            )}
           </Button>
         </form>
-        <p
+        <div
           className="text-center mt-3 cursor-pointer"
           onClick={() => Nav("/login")}
         >
           or Sign In
-        </p>
+        </div>
       </div>
       <ToastContainer />
     </div>

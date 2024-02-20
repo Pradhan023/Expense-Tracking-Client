@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Button, FormHelperText } from "@mui/material";
+import { Button, CircularProgress, FormHelperText } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,12 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { HistoryApi } from "../../modal/Slice";
 
 const Login = () => {
   const Nav = useNavigate();
-  const dispatch = useDispatch();
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -27,6 +24,8 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const [loader, setLoader] = useState(false);
 
   const handleChange = (e) => {
     setState({
@@ -64,6 +63,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoader(true);
 
     if (handleValidate()) {
       // then api call will work here
@@ -78,6 +78,7 @@ const Login = () => {
           localStorage.setItem("info", JSON.stringify(data.data.user)); //json.stringfy converts into strings and we can get data by converting in object becasue setitem converts the object in string automatically
           // dispatch(HistoryApi())
           setTimeout(() => {
+            setLoader(false);
             Nav("/expensetracker");
           }, 2000);
         } else {
@@ -145,7 +146,9 @@ const Login = () => {
                 onChange={handleChange}
               />
               <FormHelperText>
-                <span className={error.password ? "text-red-600" : "text-black"}>
+                <span
+                  className={error.password ? "text-red-600" : "text-black"}
+                >
                   {error.password}
                 </span>
               </FormHelperText>
@@ -159,7 +162,11 @@ const Login = () => {
             variant="contained"
             color="primary"
           >
-            <span className="text-lg">Sign In</span>
+            {!loader ? (
+              <span className="text-lg">Sign In</span>
+            ) : (
+              <CircularProgress color="inherit" />
+            )}
           </Button>
         </form>
         <div

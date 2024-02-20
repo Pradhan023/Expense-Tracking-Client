@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import {
   Button,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -26,6 +27,8 @@ const Container = () => {
     category: "",
     amount: "",
   });
+
+  const [loader, setLoader] = useState(false);
 
   const categoryType = ["Salary", "Expense", "Bonus"];
 
@@ -75,7 +78,7 @@ const Container = () => {
     // console.log(state);
     // console.log(newState);
     try {
-       await axios.post(
+      await axios.post(
         "https://expense-tracking-api-ux7o.onrender.com/createdata",
         newState,
         {
@@ -94,6 +97,7 @@ const Container = () => {
   // submit function
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoader(true);
 
     if (handleValidate()) {
       // alert("perfect")
@@ -104,12 +108,16 @@ const Container = () => {
         state.category != "Expense"
       ) {
         await newCall();
+        setLoader(false); //loader will stop
       } else if (Data.Balance == state.amount) {
         await newCall();
+        setLoader(false); //loader will stop
       } else if (Data.Balance > state.amount) {
         await newCall();
+        setLoader(false); //loader will stop
       } else if (state.category == "Bonus") {
         await newCall();
+        setLoader(false); //loader will stop
       } else {
         alert("You dont have enough Balance");
       }
@@ -122,28 +130,6 @@ const Container = () => {
     } else {
       alert("Invalid Entry or You dont have enough Balance ");
     }
-
-    // if (handleValidate()) {
-    //   // then api call will work here
-    //   try{
-    //     const data= await axios.post("https://expense-tracking-api-ux7o.onrender.com/createdata",state,{headers:{
-    //       Authorization: 'Bearer ' + Data.userinfo.accessToken//the token is a variable which holds the token
-    //     }});
-    //     dispatch(HistoryApi())
-    //     console.log(data.data);
-    //   }
-    //   catch(err){
-    //     console.log("Post api " , err);
-    //   }
-
-    //   dispatch(addData(state))
-    //   // console.log(state);
-    //   setState({
-    //     itemName: "",
-    //     category: "",
-    //     amount: "",
-    //   });
-    // }
   };
 
   return (
@@ -237,7 +223,11 @@ const Container = () => {
               variant="contained"
               color="primary"
             >
-              <p className="text-lg">Add Transaction</p>
+              {!loader ? (
+                <p className="text-lg">Add Transaction</p>
+              ) : (
+                <CircularProgress color="inherit" />
+              )}
             </Button>
           </form>
         </div>

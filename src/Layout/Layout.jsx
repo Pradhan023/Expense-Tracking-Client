@@ -12,7 +12,7 @@ const Layout = () => {
         </h1>
 
         {/* container grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-5 px-6 lg:px-12 lg:h-[72vh]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-5 px-6 lg:px-12">
           <Container />
           <Container2 />
         </div>
