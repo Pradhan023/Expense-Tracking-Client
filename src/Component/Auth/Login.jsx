@@ -63,9 +63,16 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoader(true);
+
+    // loader stop incase of empty field
+    const count = Object.values(state); //this property will give us the values of obj in array
+    if (count[0] == "" || count[1] == "" || count[2] == "") {
+      //here we will check if any of the value is empty then dont display the loader
+      setLoader(false);
+    }
 
     if (handleValidate()) {
+      setLoader(true);
       // then api call will work here
       try {
         const data = await axios.post(
@@ -82,6 +89,7 @@ const Login = () => {
             Nav("/expensetracker");
           }, 2000);
         } else {
+          setLoader(false);
           toast.warn(data.data.msg);
         }
       } catch (err) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Button, FormHelperText } from "@mui/material";
+import { Button, CircularProgress, FormHelperText } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -71,9 +71,16 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoader(true);
+
+    // loader stop incase of empty field
+    const count = Object.values(state); //this property will give us the values of obj in array
+    if (count[0] == "" || count[1] == "" || count[2] == "") {
+      //here we will check if any of the value is empty then dont display the loader
+      setLoader(false);
+    }
 
     if (handleValidate()) {
+      setLoader(true);
       // then api call will work here
       try {
         const data = await axios.post(
@@ -87,6 +94,7 @@ const Signup = () => {
             Nav("/login");
           }, 2000);
         } else {
+          setLoader(false);
           toast.warn(data.data.msg);
         }
       } catch (err) {
